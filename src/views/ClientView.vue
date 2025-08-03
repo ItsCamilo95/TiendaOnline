@@ -18,22 +18,22 @@
 
     <!-- Modal del carrito -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Tu Carrito</h5>
-            <button 
-              type="button" 
-              class="btn-close" 
-              data-bs-dismiss="modal" 
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <CartView ref="cartView" @close-modal="hideCartModal" />
-          </div>
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-lg">
+            <div class="modal-content h-100">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tu Carrito</h5>
+                    <button 
+                    type="button" 
+                    class="btn-close" 
+                    data-bs-dismiss="modal" 
+                    aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body d-flex flex-column pb-4">
+                    <CartView ref="cartView" @close-modal="hideCartModal" />
+                </div>
+            </div>
         </div>
-      </div>
     </div>
     
     <!-- Spinner de carga -->
@@ -122,6 +122,17 @@ export default {
     },
     showCartModal() {
       this.cartModal.show();
+
+      this.$nextTick(() => {
+      if (window.innerWidth <= 576) { // Solo para móviles
+        const summary = this.$refs.cartView?.$el?.querySelector('.cart-summary');
+        if (summary) {
+          setTimeout(() => {
+            summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 400); // Pequeño delay para asegurar que el modal está completamente visible
+        }
+      }
+    });
     },
     hideCartModal() {
       this.cartModal.hide();
@@ -141,8 +152,16 @@ export default {
 
 /* Estilos adicionales para el modal */
 .modal-body {
-  max-height: 60vh;
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
+  padding-bottom: 2rem;
+}
+
+@media (max-width: 576px) {
+  .modal-content {
+    margin: 0;
+    border-radius: 0;
+  }
 }
 
 .card-img-top {

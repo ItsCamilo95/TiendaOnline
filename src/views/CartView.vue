@@ -74,7 +74,7 @@
 
       <!-- Columna del resumen -->
       <div class="col-lg-4">
-        <div class="card shadow-sm sticky-lg-top" style="top: 20px;">
+        <div class="card shadow-sm sticky-lg-top cart-summary" style="top: 20px;">
           <div class="card-body">
             <h5 class="card-title border-bottom pb-2 mb-3">Resumen del Pedido</h5>
             
@@ -150,3 +150,15 @@ export default {
   }
 }
 </script>
+
+<style>
+@media (max-width: 576px) {
+  .cart-summary {
+    background: white;
+    padding-top: 1rem;
+    margin-top: -1rem; /* Compensa el padding */
+    position: relative;
+    z-index: 2;
+  }
+}
+</style>
