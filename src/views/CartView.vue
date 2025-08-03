@@ -122,7 +122,8 @@ export default {
         `${item.quantity}x ${item.nombre} - $${Math.round(item.precio)} c/u → $${Math.round(item.precio * item.quantity)}`
       ).join('%0A');
 
-      return `*Pedido de la tienda*%0A%0A` +
+      return `*¡Hola!, estoy interesado en estos productos:*%0A%0A` +
+            `*Pedido de la tienda*%0A%0A` +
              `*Productos:*%0A${products}%0A%0A` +
              `*Total:* $${Math.round(this.subtotal)}%0A%0A` +
              `*Datos del cliente:*%0A` +
