@@ -1,20 +1,24 @@
 <template>
-  <div class="container mt-4">
+  <div class="container mt-4 text-center">
     <h1 class="mb-4 ps-3">Nuestros Productos</h1>
 
-    <!-- Botón del carrito -->
-    <button 
-      @click="showCartModal"
-      class="btn btn-primary position-relative mb-3"
+    <!-- Contenedor alineado a la derecha -->
+<div class="d-flex justify-content-end my-4">
+  <button 
+    @click="showCartModal"
+    class="btn btn-primary position-relative d-flex align-items-center gap-2"
+  >
+    <i class="bi bi-cart-fill"></i> Carrito de Compras
+    <span 
+      v-if="cartItemsCount > 0" 
+      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
     >
-      Carrito
-      <span 
-        v-if="cartItemsCount > 0" 
-        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-      >
-        {{ cartItemsCount }}
-      </span>
-    </button>
+      {{ cartItemsCount }}
+    </span>
+  </button>
+</div>
+
+<hr>
 
     <!-- Modal del carrito -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
@@ -74,6 +78,7 @@
             </div>
           </div>
         </div>
+        <hr>
       </div>
     </div>
   </div>
