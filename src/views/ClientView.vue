@@ -18,51 +18,60 @@
 
     <!-- Modal del carrito -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-lg">
-            <div class="modal-content h-100">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tu Carrito</h5>
-                    <button 
-                    type="button" 
-                    class="btn-close" 
-                    data-bs-dismiss="modal" 
-                    aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body d-flex flex-column pb-4">
-                    <CartView ref="cartView" @close-modal="hideCartModal" />
-                </div>
-            </div>
+      <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-lg">
+        <div class="modal-content h-100">
+          <div class="modal-header">
+            <h5 class="modal-title">Tu Carrito</h5>
+            <button 
+              type="button" 
+              class="btn-close" 
+              data-bs-dismiss="modal" 
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body d-flex flex-column pb-4">
+            <CartView ref="cartView" @close-modal="hideCartModal" />
+          </div>
         </div>
+      </div>
     </div>
-    
+
     <!-- Spinner de carga -->
     <div v-if="loading" class="text-center">
       <div class="spinner-border text-primary" role="status"></div>
     </div>
 
-    <!-- Lista de productos -->
-    <div class="d-flex flex-nowrap overflow-x-auto pb-3 px-2 hide-scrollbar">
+    <!-- Productos agrupados por categoría -->
+    <div v-else>
       <div 
-        v-for="product in products" 
-        :key="product.id" 
-        class="col-8 col-sm-4 col-lg-3 px-2 flex-shrink-0"
+        v-for="(items, categoria) in productosPorCategoria" 
+        :key="categoria" 
+        class="mb-5"
       >
-        <div class="card h-100 shadow-sm">
-          <img 
-            :src="product.imagen || 'https://via.placeholder.com/300'" 
-            class="card-img-top p-2"
-            style="height: 200px; object-fit: contain;"
+        <h3 class="ps-2 mb-3 text-capitalize">{{ categoria }}</h3>
+        <div class="d-flex flex-nowrap overflow-x-auto pb-3 px-2 hide-scrollbar">
+          <div 
+            v-for="product in items" 
+            :key="product.id" 
+            class="col-8 col-sm-4 col-lg-3 px-2 flex-shrink-0"
           >
-          <div class="card-body">
-            <h5 class="card-title">{{ product.nombre }}</h5>
-            <p class="text-success fw-bold">${{ product.precio }}</p>
-            <button 
-              class="btn btn-primary btn-sm"
-              @click="addToCart(product)"
-            >
-              Añadir al carrito
-            </button>
+            <div class="card h-100 shadow-sm">
+              <img 
+                :src="product.imagen || 'https://via.placeholder.com/300'" 
+                class="card-img-top p-2"
+                style="height: 200px; object-fit: contain;"
+              >
+              <div class="card-body">
+                <h5 class="card-title">{{ product.nombre }}</h5>
+                <p class="text-success fw-bold">${{ product.precio }}</p>
+                <button 
+                  class="btn btn-primary btn-sm"
+                  @click="addToCart(product)"
+                >
+                  Añadir al carrito
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -75,8 +84,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import { mapState } from 'pinia';
 import { useCartStore } from '@/stores/cartStore';
-import CartView from './CartView.vue'; // Importa el componente del carrito
-import { Modal } from 'bootstrap'; // Importa Bootstrap Modal
+import CartView from './CartView.vue';
+import { Modal } from 'bootstrap';
 
 export default {
   components: {
@@ -93,13 +102,21 @@ export default {
     ...mapState(useCartStore, ['items', 'total']),
     cartItemsCount() {
       return this.items.reduce((total, item) => total + item.quantity, 0);
+    },
+    productosPorCategoria() {
+      const agrupados = {};
+      this.products.forEach(producto => {
+        const categoria = producto.categoria || 'Sin categoría';
+        if (!agrupados[categoria]) {
+          agrupados[categoria] = [];
+        }
+        agrupados[categoria].push(producto);
+      });
+      return agrupados;
     }
   },
   mounted() {
-    // Inicializa el modal
     this.cartModal = new Modal(document.getElementById('cartModal'));
-    
-    // Carga los productos
     this.loadProducts();
   },
   methods: {
@@ -118,21 +135,19 @@ export default {
     addToCart(product) {
       const cartStore = useCartStore();
       cartStore.addProduct(product);
-      
     },
     showCartModal() {
       this.cartModal.show();
-
       this.$nextTick(() => {
-      if (window.innerWidth <= 576) { // Solo para móviles
-        const summary = this.$refs.cartView?.$el?.querySelector('.cart-summary');
-        if (summary) {
-          setTimeout(() => {
-            summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 400); // Pequeño delay para asegurar que el modal está completamente visible
+        if (window.innerWidth <= 576) {
+          const summary = this.$refs.cartView?.$el?.querySelector('.cart-summary');
+          if (summary) {
+            setTimeout(() => {
+              summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+          }
         }
-      }
-    });
+      });
     },
     hideCartModal() {
       this.cartModal.hide();
@@ -145,25 +160,20 @@ export default {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
 .hide-scrollbar {
   scrollbar-width: none;
 }
-
-/* Estilos adicionales para el modal */
 .modal-body {
   max-height: calc(100vh - 120px);
   overflow-y: auto;
   padding-bottom: 2rem;
 }
-
 @media (max-width: 576px) {
   .modal-content {
     margin: 0;
     border-radius: 0;
   }
 }
-
 .card-img-top {
   background-color: #f8f9fa;
 }
