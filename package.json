@@ -19,6 +19,7 @@
     "bootstrap": "^5.3.7",
     "firebase": "^9.22.2",
     "pinia": "^3.0.3",
+    "sweetalert2": "^11.22.5",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   },

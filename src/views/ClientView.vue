@@ -91,6 +91,7 @@ import { mapState } from 'pinia';
 import { useCartStore } from '@/stores/cartStore';
 import CartView from './CartView.vue';
 import { Modal } from 'bootstrap';
+import Swal from 'sweetalert2'
 
 export default {
   components: {
@@ -140,6 +141,19 @@ export default {
     addToCart(product) {
       const cartStore = useCartStore();
       cartStore.addProduct(product);
+      Swal.fire({
+  toast: true,
+  position: 'top-end', // Puedes usar 'top-start', 'bottom-end', etc.
+  icon: 'success',
+  title: 'Producto agregado al carrito',
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
     },
     showCartModal() {
       this.cartModal.show();
