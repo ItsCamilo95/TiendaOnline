@@ -4,13 +4,13 @@
 
     <!-- Contenedor alineado a la derecha -->
 <div class="d-flex justify-content-end my-4">
-  <button 
+  <button
     @click="showCartModal"
     class="btn btn-primary position-relative d-flex align-items-center gap-2"
   >
     <i class="bi bi-cart-fill"></i> Carrito de Compras
-    <span 
-      v-if="cartItemsCount > 0" 
+    <span
+      v-if="cartItemsCount > 0"
       class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
     >
       {{ cartItemsCount }}
@@ -26,10 +26,10 @@
         <div class="modal-content h-100">
           <div class="modal-header">
             <h5 class="modal-title">Tu Carrito</h5>
-            <button 
-              type="button" 
-              class="btn-close" 
-              data-bs-dismiss="modal" 
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
           </div>
@@ -47,28 +47,28 @@
 
     <!-- Productos agrupados por categoría -->
     <div v-else>
-      <div 
-        v-for="(items, categoria) in productosPorCategoria" 
-        :key="categoria" 
+      <div
+        v-for="(items, categoria) in productosPorCategoria"
+        :key="categoria"
         class="mb-5"
       >
         <h3 class="ps-2 mb-3 text-capitalize">{{ categoria }}</h3>
         <div class="d-flex flex-nowrap overflow-x-auto pb-3 px-2 hide-scrollbar">
-          <div 
-            v-for="product in items" 
-            :key="product.id" 
+          <div
+            v-for="product in items"
+            :key="product.id"
             class="col-8 col-sm-4 col-lg-3 px-2 flex-shrink-0"
           >
             <div class="card h-100 shadow-sm">
-              <img 
-                :src="product.imagen || 'https://via.placeholder.com/300'" 
+              <img
+                :src="product.imagen || 'https://via.placeholder.com/300'"
                 class="card-img-top p-2"
                 style="height: 200px; object-fit: contain;"
               >
               <div class="card-body">
                 <h5 class="card-title">{{ product.nombre }}</h5>
                 <p class="text-success fw-bold">${{ product.precio }}</p>
-                <button 
+                <button
                   class="btn btn-primary btn-sm"
                   @click="addToCart(product)"
                 >
@@ -196,4 +196,14 @@ export default {
 .card-img-top {
   background-color: #f8f9fa;
 }
+
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* máximo 2 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3em; /* reserva espacio para 2 líneas */
+  line-height: 1.5em;
+}
+
 </style>
