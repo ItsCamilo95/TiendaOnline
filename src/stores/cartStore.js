@@ -8,7 +8,7 @@ export const useCartStore = defineStore('cart', {
   actions: {
     addProduct(product) {
       const existingItem = this.items.find(item => item.id === product.id)
-      
+
       if (existingItem) {
         existingItem.quantity++
       } else {
@@ -21,7 +21,7 @@ export const useCartStore = defineStore('cart', {
             quantity: 1
         })
       }
-      
+
       this.calculateTotal()
     },
     removeProduct(productId) {
