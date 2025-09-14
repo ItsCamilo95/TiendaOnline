@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4 text-center">
     <h1 class="mb-4 ps-3">Bienvenido a <span class="text-primary shadow-sm rounded p-2">Mi tienda</span></h1>
-    <p class="lead text-muted ps-3">Descubre lo mejor en moda, maquillaje y cuidado personal. ¡Compra fácil, directo por WhatsApp!</p>
+    <p class="lead text-muted p-2">Descubre lo mejor en moda, maquillaje y cuidado personal. ¡Compra fácil, directo por WhatsApp!</p>
 
   <div class="mb-4 text-center">
     <img src="https://logos-world.net/wp-content/uploads/2023/01/Yanbal-Logo.png"
@@ -16,7 +16,7 @@
         <img src="https://logos-world.net/wp-content/uploads/2023/01/Yanbal-Logo.png"
        class="img-fluid"
        alt="Banner"
-       style="max-height:60px;width: auto;">
+       style="max-height:40px;width: auto;">
       </div>
       <button
         @click="showCartModal"
