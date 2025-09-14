@@ -110,7 +110,7 @@
               >
               <div class="card-body">
                 <h5 class="card-title">{{ product.nombre }}</h5>
-                <p class="text-success fw-bold">${{ product.precio }}</p>
+                <p class="text-success fw-bold">{{ formatCOP(product.precio) }}</p>
                 <button
                   class="btn btn-primary btn-sm"
                   @click.stop="addToCart(product)"
@@ -167,7 +167,7 @@ export default {
     },
     whatsappLink() {
       if (!this.selectedProduct) return '#';
-      const mensaje = `Hola, estoy interesado en el producto "${this.selectedProduct.nombre}" que cuesta $${this.selectedProduct.precio}`;
+      const mensaje = `Hola, estoy interesado en el producto "${this.selectedProduct.nombre}" que cuesta ${this.formatCOP(this.selectedProduct.precio)}`;
       return `https://wa.me/573216935710?text=${encodeURIComponent(mensaje)}`;
     }
   },
@@ -228,6 +228,13 @@ export default {
     showProductModal(product) {
       this.selectedProduct = product;
       this.productModal.show();
+    },
+    formatCOP(value) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(value);
     }
   }
 };

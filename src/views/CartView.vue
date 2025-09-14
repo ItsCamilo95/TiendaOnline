@@ -44,7 +44,7 @@
 
                 <!-- Precio y controles -->
                 <div class="d-flex justify-content-between align-items-center mt-auto">
-                  <span class="text-primary fw-bold">${{ item.precio }}</span>
+                  <span class="text-primary fw-bold">{{ formatCOP(item.precio) }}</span>
 
                   <div class="input-group input-group-sm" style="width: 110px;">
                     <button class="btn btn-outline-secondary py-0 px-2"
@@ -64,7 +64,7 @@
                 <!-- Subtotal -->
                 <div class="text-end mt-1 small">
                   <span class="text-muted">Subtotal: </span>
-                  <span class="fw-bold">${{ (item.precio * item.quantity) }}</span>
+                  <span class="fw-bold">{{ formatCOP(item.precio * item.quantity) }}</span>
                 </div>
               </div>
             </div>
@@ -80,12 +80,12 @@
 
             <div class="d-flex justify-content-between mb-3">
               <span>Subtotal:</span>
-              <span>${{ subtotal }}</span>
+              <span>{{ formatCOP(subtotal) }}</span>
             </div>
 
             <div class="d-flex justify-content-between fw-bold border-top pt-3 mb-4">
               <span>Total:</span>
-              <span>${{ subtotal }}</span>
+              <span>{{ formatCOP(subtotal) }}</span>
             </div>
 
             <button @click="openWhatsApp"
@@ -126,7 +126,7 @@ export default {
       return `*¡Hola!, estoy interesado en estos productos:*%0A%0A` +
             `*Pedido de la tienda*%0A%0A` +
              `*Productos:*%0A${products}%0A%0A` +
-             `*Total:* $${Math.round(this.subtotal)}%0A%0A` +
+             `*Total:* $${Math.round(this.formatCOP(this.subtotal))}%0A%0A` +
              `*Datos del cliente:*%0A` +
              `Nombre: %0A` +
              `Dirección: %0A` +
@@ -175,6 +175,13 @@ export default {
             });
           }
         });
+    },
+    formatCOP(value) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      }).format(value);
     }
   }
 }
